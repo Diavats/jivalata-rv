@@ -1,3 +1,4 @@
+dir
 @echo off
 setlocal EnableDelayedExpansion
 
@@ -46,4 +47,4 @@ if %ERRORLEVEL% NEQ 0 (
 
 echo.
 echo [INFO] Dashboard session ended.
-pause
+pause 

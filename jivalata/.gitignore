@@ -1,0 +1,21 @@
+# Virtual envs
+.venv/
+.venv311/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local shortcut
+.gemini.lnk
+
+# Big data / binaries (DO NOT PUSH)
+data/
+assets/*.mp4
+src/assets/*.mp4
+*.tif
+*.npy
+*.zip
+ngrok.exess
+ngrok.exe

@@ -1,93 +1,145 @@
-# JĪVALATĀ MVP
-# Floodplain Restoration & Flood Risk Reduction Dashboard
+# JĪVALATĀ  
+## AI Decision Engine System For Floodplain Risk Reduction
+
+JĪVALATĀ is a spatial intelligence framework designed to support regenerative floodplain planning.  
+
+Instead of focusing solely on flood mitigation, the system integrates terrain morphology, ecological sensitivity, vegetation health, and human exposure to prioritize high-impact restoration zones.
+
+---
+
+## Objective
+
+To move beyond sustainability-driven containment models and enable data-driven regenerative decision-making in climate-vulnerable floodplains.
+
+---
+
+## System Architecture
+
+The pipeline integrates multiple spatial layers and produces ranked intervention zones:
+
+1. **Spatial Harmonization**
+   - DEM-aligned raster preprocessing
+   - Pixel-level feature extraction
+
+2. **Feature Engineering**
+   - Elevation
+   - Slope
+   - NDVI
+   - Population exposure (WorldPop)
+   - Wetland sensitivity
+
+3. **Flood Risk Modeling**
+   - Random Forest classifier
+   - Physically-informed synthetic labeling
+   - Multi-class risk output (Low / Medium / High)
+
+4. **Restoration Simulation Engine**
+   - NDVI-based intervention modeling
+   - Risk reduction simulation
+
+5. **Priority Scoring**
+   - Composite regenerative score
+   - Ranked intervention zones
+   - Exportable decision-support CSV
+
+---
 
 ## Project Structure
 
-```
+
 jivalata/
 ├── src/
-│   ├── data_loader.py      # Module 1: Data loading & feature extraction
-│   ├── flood_risk_model.py # Module 2: Logistic regression model (TBD)
-│   ├── simulation.py       # Module 3: Restoration simulation engine (TBD)
-│   ├── priority_scoring.py # Module 4: Priority scoring system (TBD)
-│   └── dashboard.py        # Module 5: Streamlit dashboard (TBD)
-├── data/                   # Place GeoTIFF files here
-│   ├── haridwar_merged_dem.tif
-│   └── ndvi_aligned_to_dem.tif
+│ ├── data_loader.py
+│ ├── flood_risk_model.py
+│ ├── simulation.py
+│ ├── priority_scoring.py
+│ ├── ui_components.py
+│ └── dashboard.py
+├── data/ # Local raster inputs (excluded from repo)
 ├── requirements.txt
+├── packages.txt
 └── README.md
-```
 
-## Setup
 
-1. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+---
 
-2. Place your GeoTIFF files in the `data/` folder
+##  Setup Instructions
 
-3. Test the data loader:
-   ```bash
-   python src/data_loader.py data/haridwar_merged_dem.tif data/ndvi_aligned_to_dem.tif
-   ```
-
-## Module 1: Data Loader
-
-The data loader module provides:
-
-- **`load_data(dem_path, ndvi_path)`**: Main function to load all data
-- **`LoadedData`**: Container with elevation, slope, ndvi arrays and feature table
-- **`get_feature_matrix(loaded_data)`**: Get ML-ready feature matrix (n_pixels × 3)
-- **`load_features(dem_path, ndvi_path, preprocessed_path)`**: Unified entry point for ML
-- **`load_data_cached()`**: Streamlit-compatible cached loader
-
-## Module 2: Flood Risk Model (Random Forest)
-
-Implements a Random Forest Classifier trained on physically-based synthetic labels.
-
-- **`FloodRiskModel` Class**:
-    - `train(X)`: Generates labels on-the-fly and trains features.
-    - `predict(X)`: Returns risk classes {0: Low, 1: Med, 2: High}.
-    - `predict_proba(X)`: Usage for Module 4 scoring.
-    - `get_feature_importance()`: Returns model weights.
-
-### Usage Example
-
-```python
-from src.data_loader import load_features
-from src.flood_risk_model import FloodRiskModel
-
-# 1. Load Features
-X = load_features(dem_path="data/haridwar_merged_dem.tif", ndvi_path="data/ndvi_aligned_to_dem.tif")
-
-# 2. Train Model
-model = FloodRiskModel()
-model.train(X)
-
-# 3. Predict Risk
-risk_classes = model.predict(X)
-```
-
-## Module 5: Interactive Dashboard
-
-Lightweight Streamlit application visualizing flood risk and restoration impact.
-
-### Features
-- **Interactive Controls**: Adjust NDVI increase (0.0 - 0.5) and run simulations.
-- **Dynamic Mapping**: Side-by-side comparison of Base vs. Simulated Risk.
-- **Decision Support**: Priority Heatmap and downloadable CSV of ranked zones.
-
-### Running the Dashboard
-
+###  1) Clone Repository
 ```bash
+git clone https://github.com/Diavats/Jivalata.git
+cd Jivalata
+### 2) Create Virtual Environment
+python -m venv .venv
+.venv\Scripts\activate
+### 3) Install Dependencies
+pip install -r requirements.txt
+### 4) Add Required Data
+
+Place required GeoTIFF raster layers inside the data/ directory.
+
+Example:
+
+haridwar_merged_dem.tif
+
+ndvi_aligned_to_dem.tif
+
+worldpop_2026.tif
+
+wetland_sensitivity_gee.tif
+
+### Run Data Pipeline
+
+Test feature extraction:
+
+python src/data_loader.py
+
+###Launch Interactive Dashboard
 streamlit run src/dashboard.py
-```
 
-## Status
+### Dashboard Capabilities
+Adjustable NDVI-based restoration simulation
 
-- [x] Module 1: Data Loader
-- [x] Module 2: Flood Risk Model
-- [x] Module 3: Restoration Simulation Engine
-- [x] Module 4: Priority Scoring
-- [x] Module 5: Interactive Dashboard
+Base vs. simulated flood risk comparison
+
+Dynamic risk heatmaps
+
+Priority ranking of intervention zones
+
+Exportable CSV output for planning use
+
+### Key Outcomes
+
+->Pixel-level flood risk classification
+
+->Regenerative intervention prioritization
+
+->Exposure-aware ecological restoration modeling
+
+->Decision-support visualization for planners
+
+### Technology Stack
+
+Python
+
+Rasterio
+
+NumPy
+
+Pandas
+
+Scikit-learn
+
+Streamlit
+
+### Status
+
+-> Data Loader
+-> Flood Risk Model
+-> Restoration Simulation
+-> Priority Scoring
+-> Interactive Dashboard
+
+### Author
+
+Dia Vats

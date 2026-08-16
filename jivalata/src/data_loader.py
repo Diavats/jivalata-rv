@@ -265,6 +265,60 @@ def load_features(
     # Extract feature matrix
     return get_feature_matrix(data)
 
+def load_population(pop_path: str) -> np.ndarray:
+    """
+    Load population raster for impact analysis.
+    
+    Args:
+        pop_path: Path to population GeoTIFF
+        
+    Returns:
+        2D numpy array of population counts
+        
+    Raises:
+        FileNotFoundError: If file is missing
+    """
+    path = Path(pop_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Population file not found: {path}")
+        
+    with rasterio.open(path) as src:
+        # Read band 1
+        data = src.read(1).astype(np.float32)
+        
+        # Sanitize data
+        data[~np.isfinite(data)] = 0.0  # Replace NaN/Inf with 0
+        data[data < 0] = 0.0            # Clip negatives
+        
+    return data
+
+
+def load_wetland_sensitivity(wetland_path: str) -> np.ndarray:
+    """
+    Load wetland sensitivity raster for ecological penalty in priority scoring.
+    
+    Args:
+        wetland_path: Path to wetland sensitivity GeoTIFF
+        
+    Returns:
+        2D numpy array of wetland sensitivity values [0, 1]
+        
+    Raises:
+        FileNotFoundError: If file is missing
+    """
+    path = Path(wetland_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Wetland sensitivity file not found: {path}")
+        
+    with rasterio.open(path) as src:
+        # Read band 1
+        data = src.read(1).astype(np.float32)
+        
+        # Sanitize data
+        data[~np.isfinite(data)] = 0.0  # Replace NaN/Inf with 0
+        data = np.clip(data, 0.0, 1.0)  # Clip to [0, 1]
+        
+    return data
 
 
 if __name__ == "__main__":
